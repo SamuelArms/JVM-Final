@@ -1,5 +1,6 @@
 package coursework.project
 
+import coursework.criticalpath.CriticalPathKot
 import coursework.task.Task
 import coursework.task.TaskHandler
 import org.json.JSONObject
@@ -61,6 +62,11 @@ class ProjectHandler {
     fun getDisplay(project: Project): String{
         var taskHandler = TaskHandler()
         var tasks = taskHandler.getTasksFromSave()
+
+        var criticalPath = CriticalPathKot()
+        var allTasks = criticalPath.getAllTasksInProject(project)
+        var (criticalPathList, endNodePos) = criticalPath.getCriticalPath(allTasks)
+
 
         var display = "Project Title:\n\t ${project.projectTitle} \n Tasks for this project:"
         for (task : Task in tasks){

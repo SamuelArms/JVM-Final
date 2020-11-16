@@ -72,6 +72,12 @@ class CriticalPathKot {
             allTasks[i].eet = allTasks[i].est + allTasks[i].duration
         }
 
+        println("walk list forwards")
+        for(task : Task in allTasks){
+            println("Task Title: ${task.taskTitle}\tEarly Start Time: ${task.est}\tEarly End Time: ${task.eet}\t" +
+                    "late Start Time: ${task.lst}\tlate End Time: ${task.let}")
+        }
+
 
         return allTasks
     }
@@ -104,17 +110,19 @@ class CriticalPathKot {
             allTasks[i].lst = allTasks[i].let - allTasks[i].duration
             // the base node of the critical path is found so return the list
             if(allTasks[i].est== 0){
-                for (task :Task in allTasks){
-                    println("${task.taskTitle} early start time: ${task.est} late start time:${task.lst}" +
-                            " early finish time: ${task.eet} late finish time: ${task.let}")
+                println("walk list backwards")
+                for(task : Task in allTasks){
+                    println("Task Title: ${task.taskTitle}\tEarly Start Time: ${task.est}\tEarly End Time: ${task.eet}\t" +
+                            "late Start Time: ${task.lst}\tlate End Time: ${task.let}")
                 }
                 return Pair(allTasks,endNodePos)
             }
         }
 
-        for (task :Task in allTasks){
-            println("${task.taskTitle} early start time: ${task.est} late start time:${task.lst}" +
-                    " early finish time: ${task.eet} late finish time: ${task.let}")
+        println("walk list backwards")
+        for(task : Task in allTasks){
+            println("Task Title: ${task.taskTitle}\tEarly Start Time: ${task.est}\tEarly End Time: ${task.eet}\t" +
+                    "late Start Time: ${task.lst}\tlate End Time: ${task.let}")
         }
         return Pair(allTasks,endNodePos)
     }
