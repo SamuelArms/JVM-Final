@@ -39,21 +39,16 @@ class CriticalPathKot {
     fun getCriticalPath(allTasks: MutableList<Task>) : Pair<List<Task>, Int> {
         // walk through the list forwards
         var updatedList = walkListAhead(allTasks)
-        updatedList = WalkListBackwards(updatedList)
         // walk through the list backwards
-        /*
-        var (listWalked, pos) = WalkListBackwards(updatedList)
+        var (listWalkedBack, biggestCost) = WalkListBackwards(updatedList)
+
         var criticalPathList = mutableListOf<Task>()
-        for (task: Task in listWalked){
-            if ((task.eet - task.let == 0) && (task.est - task.lst == 0)){
-                criticalPathList.add(task)
-            }
+
+        // flip the list do it goes from base task to end node
+        for (i in listWalkedBack.size -1 downTo 0) {
+            criticalPathList.add(listWalkedBack[i])
         }
-        return Pair(criticalPathList, listWalked[pos].eet)
-
-         */
-        return Pair(updatedList, 1)
-
+        return Pair(criticalPathList, biggestCost)
     }
 
     fun walkListAhead(allTasks: List<Task>): List<Task>{
@@ -87,7 +82,7 @@ class CriticalPathKot {
         return allTasks
     }
 
-    fun WalkListBackwards(allTasks: List<Task>) : List<Task> {
+    fun WalkListBackwards(allTasks: List<Task>) : Pair<MutableList<Task>, Int> {
         //end task is the node with the biggest early finish time this therefore has to be the end node and the most important one
         // find the node with the biggest early finish time
         var endNodePos = 0
@@ -105,43 +100,24 @@ class CriticalPathKot {
 
         var empty = mutableListOf<Task>()
         var recursiveList = recursiveGetPredecessor(allTasks[endNodePos], empty)
-        for (task : Task in recursiveList){
-            println(task.taskTitle)
-        }
-        println("size: " + recursiveList.size)
-
-        /*
-        if(allTasks[i].est== 0){
-            println("walk list backwards")
-            for(task : Task in allTasks){
-                println("Task Title: ${task.taskTitle}\tEarly Start Time: ${task.est}\tEarly End Time: ${task.eet}\t" +
-                        "late Start Time: ${task.lst}\tlate End Time: ${task.let}")
-            }
-            return Pair(allTasks,endNodePos)
-        }
-
-         */
 
         println("walk list backwards")
         for(task : Task in allTasks){
             println("Task Title: ${task.taskTitle}\tEarly Start Time: ${task.est}\tEarly End Time: ${task.eet}\t" +
                     "late Start Time: ${task.lst}\tlate End Time: ${task.let}")
         }
-        return allTasks
+        return Pair(recursiveList, allTasks[endNodePos].eet)
     }
 
 
     fun recursiveGetPredecessor(task:Task, taskList: MutableList<Task>) : MutableList<Task>{
-        println("this is called")
         if (task.predecessors.isEmpty()){
-            println("empty")
             taskList.add(task)
             return taskList
         } else {
-            println("else")
             taskList.add(task)
             var task = createTaskFromHashMap(task.predecessors.get(0) as MutableMap<*, *>)
-             return recursiveGetPredecessor(task, taskList)
+            return recursiveGetPredecessor(task, taskList)
         }
     }
 

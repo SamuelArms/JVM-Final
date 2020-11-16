@@ -64,8 +64,7 @@ class ProjectHandler {
         var tasks = taskHandler.getTasksFromSave()
 
         var criticalPath = CriticalPathKot()
-        var allTasks = criticalPath.getAllTasksInProject(project)
-        var (criticalPathList, endNodePos) = criticalPath.getCriticalPath(allTasks)
+
 
 
         var display = "Project Title:\n\t ${project.projectTitle} \n Tasks for this project:"
@@ -74,7 +73,18 @@ class ProjectHandler {
                 display += "\n\t${task.taskTitle}"
             }
         }
+        if (project.tasksAssigned.isNotEmpty()) {
+            var allTasks = criticalPath.getAllTasksInProject(project)
+            var (criticalPathList, biggestCost) = criticalPath.getCriticalPath(allTasks)
+
+            display += "\nCritical Cost:\n\t$biggestCost"
+            display += "\nCritical Path:"
+            for (task: Task in criticalPathList) {
+                display += "\n\t${task.taskTitle}"
+            }
+        }
         return display
+
     }
 
     fun updateProject(task: Task, project: Project): Project{

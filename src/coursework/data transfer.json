@@ -1,1 +1,1 @@
-{"duration":4,"predecessors":[{"duration":1,"predecessors":[],"projectFor":"project","teamAssigned":"team","criticalCost":0,"eet":-1,"est":0,"successors":[],"let":0,"taskTitle":"base task","lst":0}],"teamAssigned":"team","projectFor":"project","successors":[],"taskTitle":"successor task 1"}
+{"duration":100,"predecessors":[],"teamAssigned":"team","projectFor":"project 2","successors":[],"taskTitle":"huge base task"}

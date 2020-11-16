@@ -1,3 +1,0 @@
-{"duration":1,"predecessors":[],"projectFor":"project","teamAssigned":"team","criticalCost":0,"eet":-1,"est":0,"successors":[],"let":0,"taskTitle":"base task","lst":0}
-{"duration":2,"predecessors":[],"projectFor":"project","teamAssigned":"team","criticalCost":0,"eet":-1,"est":0,"successors":[],"let":0,"taskTitle":"base task 2","lst":0}
-{"duration":4,"predecessors":[{"duration":1,"predecessors":[],"projectFor":"project","teamAssigned":"team","criticalCost":0,"eet":-1,"est":0,"successors":[],"let":0,"taskTitle":"base task","lst":0}],"projectFor":"project","teamAssigned":"team","criticalCost":0,"eet":-1,"est":0,"successors":[],"let":0,"taskTitle":"successor task 1","lst":0}
