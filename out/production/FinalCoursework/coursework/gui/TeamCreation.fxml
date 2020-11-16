@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<AnchorPane prefHeight="400.0" prefWidth="250.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="coursework.gui.TeamCreationController">
+    <children>
+        <VBox alignment="CENTER" layoutX="45.0" layoutY="36.0" prefHeight="320.0" prefWidth="160.0">
+            <children>
+                <Label text="Team Name:" />
+                <TextField fx:id="teamNameField" />
+                <Region layoutX="10.0" layoutY="119.0" prefHeight="64.0" prefWidth="159.0" />
+                <Label text="Team member 1:" />
+                <TextField fx:id="teamMemberOneField" />
+                <Region layoutX="10.0" layoutY="193.0" prefHeight="64.0" prefWidth="159.0" />
+                <Label text="Team member 2:" />
+                <TextField fx:id="teamMemberTwoField" />
+                <Region prefHeight="64.0" prefWidth="159.0" />
+                <Button fx:id="submitButton" alignment="CENTER_RIGHT" mnemonicParsing="false" onAction="#submit" text="Create Team" />
+            </children>
+        </VBox>
+    </children>
+</AnchorPane>

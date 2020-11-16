@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+<AnchorPane prefHeight="400.0" prefWidth="250.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="coursework.gui.ProjectCreationController">
+    <children>
+        <VBox alignment="CENTER" layoutX="45.0" layoutY="40.0" prefHeight="320.0" prefWidth="160.0">
+            <children>
+                <Label text="Project Title:">
+               <VBox.margin>
+                  <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+               </VBox.margin></Label>
+                <TextField fx:id="projectTitleField" />
+                <Region prefHeight="64.0" prefWidth="159.0" />
+                <Button fx:id="submitButton" mnemonicParsing="false" onAction="#submit" text="Button" />
+            </children></VBox>
+    </children>
+</AnchorPane>
