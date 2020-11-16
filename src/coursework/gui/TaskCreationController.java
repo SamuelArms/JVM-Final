@@ -51,6 +51,8 @@ public class TaskCreationController implements Initializable {
         teams = teamHandler.getTeamsFromSave();
         setProjectListView();
         setTeamListView();
+        PopUpBox.display("Instructions", "Select the project this is a task for\n" +
+                "Select the team to complete this task\nIf this task is a successor Please select the task that has to be completed first");
 
     }
 
