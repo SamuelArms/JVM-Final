@@ -101,11 +101,9 @@ public class TaskCreationController implements Initializable {
         jsonObj.put("projectFor", projectListView.getSelectionModel().getSelectedItem().toString());
         jsonObj.put("duration", Integer.parseInt(taskDurationField.getText()));
         if (taskListView.getSelectionModel().getSelectedItem() == null) {
-            System.out.println("if");
             jsonObj.put("predecessors", empty);
             jsonObj.put("successors", empty);
         } else {
-            System.out.println("else");
             for (int i = 0; i < tasks.size(); i++) {
                 if (tasks.get(i).getTaskTitle().equals(taskListView.getSelectionModel().getSelectedItem().toString())){
                     predecessors.add(tasks.get(i));
@@ -127,6 +125,4 @@ public class TaskCreationController implements Initializable {
         Stage stage = (Stage) submitButton.getScene().getWindow();
         stage.close();
     }
-
-
 }

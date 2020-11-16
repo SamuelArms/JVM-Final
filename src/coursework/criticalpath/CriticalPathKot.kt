@@ -36,10 +36,12 @@ class CriticalPathKot {
         return allTasksInProject
     }
 
-    fun getCriticalPath(allTasks: MutableList<Task>) : Pair<List<Task>, Int>{
+    fun getCriticalPath(allTasks: MutableList<Task>) : Pair<List<Task>, Int> {
         // walk through the list forwards
         var updatedList = walkListAhead(allTasks)
+        updatedList = WalkListBackwards(updatedList)
         // walk through the list backwards
+        /*
         var (listWalked, pos) = WalkListBackwards(updatedList)
         var criticalPathList = mutableListOf<Task>()
         for (task: Task in listWalked){
@@ -48,13 +50,16 @@ class CriticalPathKot {
             }
         }
         return Pair(criticalPathList, listWalked[pos].eet)
+
+         */
+        return Pair(updatedList, 1)
+
     }
 
     fun walkListAhead(allTasks: List<Task>): List<Task>{
         // start with the first element in the list as this should always be a base node
         allTasks[0].eet = allTasks[0].est + allTasks[0].duration
         for (i in 1 until allTasks.size) {
-
             var predecessorList = allTasks[i].predecessors
             for (j in predecessorList.indices) {
                 var task = createTaskFromHashMap(predecessorList.get(j) as MutableMap<*, *>)
@@ -82,7 +87,7 @@ class CriticalPathKot {
         return allTasks
     }
 
-    fun WalkListBackwards(allTasks: List<Task>) : Pair<List<Task>, Int> {
+    fun WalkListBackwards(allTasks: List<Task>) : List<Task> {
         //end task is the node with the biggest early finish time this therefore has to be the end node and the most important one
         // find the node with the biggest early finish time
         var endNodePos = 0
@@ -98,33 +103,46 @@ class CriticalPathKot {
         allTasks[endNodePos].lst = allTasks[endNodePos].eet - allTasks[endNodePos].duration
         // now that the end node has been set can backwards from this node
 
-        // only need to consider the base task that contains the final task as part of its successors
-        for (i in endNodePos - 1 downTo 0){
-            if (allTasks[i].let == 0){
-                allTasks[i].let  = allTasks[i + 1].lst
-            } else {
-                if (allTasks[i].let > allTasks[i + 1].lst){
-                    allTasks[i].let  = allTasks[i + 1].lst
-                }
-            }
-            allTasks[i].lst = allTasks[i].let - allTasks[i].duration
-            // the base node of the critical path is found so return the list
-            if(allTasks[i].est== 0){
-                println("walk list backwards")
-                for(task : Task in allTasks){
-                    println("Task Title: ${task.taskTitle}\tEarly Start Time: ${task.est}\tEarly End Time: ${task.eet}\t" +
-                            "late Start Time: ${task.lst}\tlate End Time: ${task.let}")
-                }
-                return Pair(allTasks,endNodePos)
-            }
+        var empty = mutableListOf<Task>()
+        var recursiveList = recursiveGetPredecessor(allTasks[endNodePos], empty)
+        for (task : Task in recursiveList){
+            println(task.taskTitle)
         }
+        println("size: " + recursiveList.size)
+
+        /*
+        if(allTasks[i].est== 0){
+            println("walk list backwards")
+            for(task : Task in allTasks){
+                println("Task Title: ${task.taskTitle}\tEarly Start Time: ${task.est}\tEarly End Time: ${task.eet}\t" +
+                        "late Start Time: ${task.lst}\tlate End Time: ${task.let}")
+            }
+            return Pair(allTasks,endNodePos)
+        }
+
+         */
 
         println("walk list backwards")
         for(task : Task in allTasks){
             println("Task Title: ${task.taskTitle}\tEarly Start Time: ${task.est}\tEarly End Time: ${task.eet}\t" +
                     "late Start Time: ${task.lst}\tlate End Time: ${task.let}")
         }
-        return Pair(allTasks,endNodePos)
+        return allTasks
+    }
+
+
+    fun recursiveGetPredecessor(task:Task, taskList: MutableList<Task>) : MutableList<Task>{
+        println("this is called")
+        if (task.predecessors.isEmpty()){
+            println("empty")
+            taskList.add(task)
+            return taskList
+        } else {
+            println("else")
+            taskList.add(task)
+            var task = createTaskFromHashMap(task.predecessors.get(0) as MutableMap<*, *>)
+             return recursiveGetPredecessor(task, taskList)
+        }
     }
 
 
