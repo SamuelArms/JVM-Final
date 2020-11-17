@@ -41,7 +41,7 @@ class CriticalPathKot {
 
     fun walkListAhead(allTasks: List<Task>): List<Task>{
         // start with the first element in the list as this should always be a base node
-        allTasks[0].eet = allTasks[0].est + allTasks[0].duration
+        allTasks[0].earlyFinishTime = allTasks[0].earlyStartTime + allTasks[0].duration
         for (i in 1 until allTasks.size) {
             var predecessorList = allTasks[i].predecessors
             for (j in predecessorList.indices) {
@@ -49,15 +49,15 @@ class CriticalPathKot {
                 for (k in 0 until allTasks.size){
                     if (allTasks[k].taskTitle.equals(task.taskTitle)){
                         // if the current tasks est is bigger than its predecessors early end time
-                        if (allTasks[i].est < allTasks[k].eet){
+                        if (allTasks[i].earlyStartTime < allTasks[k].earlyFinishTime){
                             // set the start time to be the same as the end time
-                            allTasks[i].est = allTasks[k].eet
+                            allTasks[i].earlyStartTime = allTasks[k].earlyFinishTime
                         }
                     }
                 }
             }
             // set the current tasks early end time as the early start time plus the duration
-            allTasks[i].eet = allTasks[i].est + allTasks[i].duration
+            allTasks[i].earlyFinishTime = allTasks[i].earlyStartTime + allTasks[i].duration
         }
         return allTasks
     }
@@ -68,20 +68,20 @@ class CriticalPathKot {
         var endNodePos = 0
         var endNode = allTasks[0]
         for (i in 0 until allTasks.size){
-            if (allTasks[i].eet > endNode.eet){
+            if (allTasks[i].earlyFinishTime > endNode.earlyFinishTime){
                 endNode = allTasks[i]
                 endNodePos = i
             }
         }
         // go through the predecessors now and set all the values
-        allTasks[endNodePos].let = allTasks[endNodePos].eet
-        allTasks[endNodePos].lst = allTasks[endNodePos].eet - allTasks[endNodePos].duration
+        allTasks[endNodePos].lateFinishTime = allTasks[endNodePos].earlyFinishTime
+        allTasks[endNodePos].lateStartTime = allTasks[endNodePos].earlyFinishTime - allTasks[endNodePos].duration
         // now that the end node has been set can backwards from this node
 
         var empty = mutableListOf<Task>()
         var recursiveList = recursiveGetPredecessor(allTasks[endNodePos], empty)
 
-        return Pair(recursiveList, allTasks[endNodePos].eet)
+        return Pair(recursiveList, allTasks[endNodePos].earlyFinishTime)
     }
 
 

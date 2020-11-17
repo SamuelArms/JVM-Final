@@ -10,11 +10,10 @@ class Task(
         var successors: List<Task>
 ) {
     // Extra values that do not need to be declared in the primary constructor
-    var criticalCost =0
-    var est = 0
-    var lst = 0
-    var eet = -1
-    var let = 0
+    var earlyStartTime = 0
+    var lateStartTime = 0
+    var earlyFinishTime = -1
+    var lateFinishTime = 0
 
 
 }

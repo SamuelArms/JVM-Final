@@ -18,22 +18,23 @@ class TaskHandler {
     }
 
     fun getTasksFromSave(): ArrayList<Task> {
-        var lineList = mutableListOf<String>()
         // retrieve the data from the save file using lambda expressions
-        File("src/coursework/persistence/task Persistence.txt").useLines { lines -> lines.forEach { lineList.add(it) } }
-        lineList.forEach { line ->
-            // get the values within the lambda expression
-            val jsonObj = JSONObject(line)
-            var taskTitle = jsonObj.get("taskTitle").toString()
-            var teamAssigned = jsonObj.get("teamAssigned").toString()
-            var projectFor = jsonObj.get("projectFor").toString()
-            var duration = jsonObj.getInt("duration")
-            var predecessors = jsonObj.getJSONArray("predecessors").toList()
-            var successors = jsonObj.getJSONArray("successors").toList()
-            tasks.add(createTask(taskTitle, teamAssigned, projectFor,
-                    duration, predecessors as List<Task>, successors as List<Task>))
+        File("src/coursework/persistence/task Persistence.txt").useLines { lines ->
+            lines.forEach { line ->
+                // within the lambda expression retrieve the data and get the needed values to create the task
+                val jsonObj = JSONObject(line)
+                var taskTitle = jsonObj.get("taskTitle").toString()
+                var teamAssigned = jsonObj.get("teamAssigned").toString()
+                var projectFor = jsonObj.get("projectFor").toString()
+                var duration = jsonObj.getInt("duration")
+                var predecessors = jsonObj.getJSONArray("predecessors").toList()
+                var successors = jsonObj.getJSONArray("successors").toList()
+                // create the task and add it to the tasks list within the lambda expression
+                tasks.add(createTask(taskTitle, teamAssigned, projectFor,
+                        duration, predecessors as List<Task>, successors as List<Task>))
+            }
         }
-        // return the list of base tasks
+        // return the list of tasks
         return tasks
     }
 
@@ -71,13 +72,16 @@ class TaskHandler {
                     "Duration:\n\t ${task.duration}\nTeam Assigned:\n\t${task.teamAssigned}" +
                     "\nProject For: \n\t ${task.projectFor}\nPredecessor Task:\n\tThis is a base task"
         } else {
+            // if the task is found to be a successor task then also add the task that has to be completed before it
             display = "TaskTitle:\n\t${task.taskTitle}\n" +
                     "Duration:\n\t ${task.duration}\nTeam Assigned:\n\t${task.teamAssigned}" +
                     "\nProject For: \n\t ${task.projectFor}\nPredecessor Task:\n\t"
             for (i in task.predecessors.indices) {
                 if (task.predecessors.get(i) is Task) {
+                    // if the predecessor task is stored as a task simply ass the title to the string
                     display += "${task.predecessors.get(i).taskTitle}"
                 } else {
+                    // if the predecessor is stored as a has map get the value out of the map
                     display += getTaskTitle(task.predecessors.get(i) as MutableMap<*, *>)
                 }
             }

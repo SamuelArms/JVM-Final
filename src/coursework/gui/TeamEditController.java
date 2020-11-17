@@ -29,14 +29,6 @@ public class TeamEditController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         currentTeam = teamHandler.createTeamFromTransferFile();
-        try {
-            file = new FileWriter("src/coursework/data transfer.json");
-            // write an empty line
-            file.write("");
-            file.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     public void addMember(){

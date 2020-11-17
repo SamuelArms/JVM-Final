@@ -8,6 +8,16 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
 
+
+    /*
+
+    VERY IMPORTANT PLEASE TAKE NOT FOR THIS TO WORK:
+    PLEASE USE SDK 1.8 AND THE PROJECT LANGUAGE OF 8
+
+    ALSO ENSURE THAT THE org.json JAR IS INCLUDED IN THE LIBRARY
+
+     */
+
     @Override
     public void start(Stage primaryStage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getResource("gui/MainGui.fxml"));
