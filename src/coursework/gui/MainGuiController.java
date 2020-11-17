@@ -224,7 +224,7 @@ public class MainGuiController implements Initializable {
                         ArrayList<Task> allTasks;
                         ArrayList<Task> criticalTasks;
                         if (!project.getTasksAssigned().isEmpty()){
-                            allTasks = (ArrayList<Task>) criticalPathKot.getAllTasksInProject(project);
+                            allTasks = criticalPathSca.getAllTasks(project);
                             criticalTasks = criticalPathSca.getCriticalPath(allTasks);
                             display = projectHandler.getScalaCritical(criticalTasks, projectHandler.getDisplay(project));
                         } else {

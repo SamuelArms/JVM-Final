@@ -74,16 +74,13 @@ class ProjectHandler {
     fun getKotlinCritical(project: Project, display : String) : String {
         var criticalPath = CriticalPathKot()
         var display = display
-        if (project.tasksAssigned.isNotEmpty()) {
-            var allTasks = criticalPath.getAllTasksInProject(project)
-            var (criticalPathList, biggestCost) = criticalPath.getCriticalPath(allTasks)
-
-            display += "\n\nCritical Path Calculated with Kotlin:"
-            display += "\nCritical Cost:\n\t$biggestCost"
-            display += "\nCritical Path:"
-            for (task: Task in criticalPathList) {
-                display += "\n\t${task.taskTitle}"
-            }
+        var allTasks = criticalPath.getAllTasksInProject(project)
+        var (criticalPathList, biggestCost) = criticalPath.getCriticalPath(allTasks)
+        display += "\n\nCritical Path Calculated with Kotlin:"
+        display += "\nCritical Cost:\n\t$biggestCost"
+        display += "\nCritical Path:"
+        for (task: Task in criticalPathList) {
+            display += "\n\t${task.taskTitle}"
         }
         return display
     }

@@ -11,9 +11,9 @@ import scala.jdk.CollectionConverters.ListHasAsScala
 
 class CriticalPathScala {
 
-  def getAllTasks(project : Project): mutable.Buffer[Task] ={
+  def getAllTasks(project : Project): util.ArrayList[Task] ={
     var allTasks = new ArrayBuffer[Task]()
-    for (i <- 0 to project.getTasksAssigned.size()){
+    for (i <- 0 to project.getTasksAssigned.size() - 1){
       if (project.getTasksAssigned.get(i).isInstanceOf[Task]){
         allTasks.addOne(project.getTasksAssigned.get(i))
       } else {
@@ -21,7 +21,12 @@ class CriticalPathScala {
       }
     }
 
-    allTasks
+    var allTaskScala = new util.ArrayList[Task]()
+    for (i <- allTasks){
+      allTaskScala.add(i)
+    }
+
+    allTaskScala
   }
 
   def getCriticalPath(allTasks: util.ArrayList[Task]) : util.ArrayList[Task] ={
@@ -52,12 +57,6 @@ class CriticalPathScala {
         }
       }
       scalaAllTasks(i).setEet(scalaAllTasks(i).getEst + scalaAllTasks(i).getDuration)
-    }
-
-    println("walk list forwards")
-    for(task <- scalaAllTasks){
-      println("Task Title: " + task.getTaskTitle + " Early Start Time: " + task.getEst + " Early End Time: " +task.getEet+
-        " late Start Time: " +task.getLst+" late End Time: " + task.getLet)
     }
     scalaAllTasks
   }

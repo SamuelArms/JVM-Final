@@ -59,14 +59,6 @@ class CriticalPathKot {
             // set the current tasks early end time as the early start time plus the duration
             allTasks[i].eet = allTasks[i].est + allTasks[i].duration
         }
-
-        println("walk list forwards")
-        for(task : Task in allTasks){
-            println("Task Title: ${task.taskTitle}\tEarly Start Time: ${task.est}\tEarly End Time: ${task.eet}\t" +
-                    "late Start Time: ${task.lst}\tlate End Time: ${task.let}")
-        }
-
-
         return allTasks
     }
 
@@ -114,10 +106,6 @@ class CriticalPathKot {
         val successors = map["successors"] as List<Task>
         return taskHandler.createTask(taskTitle, teamAssigned, projectFor, duration,
                 predecessors, successors)
-    }
-
-    fun getSuccessors(map: MutableMap<*, *>): List<Task>{
-        return  map["successors"] as List<Task>
     }
 
 }
