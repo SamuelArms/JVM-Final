@@ -90,6 +90,4 @@ class TaskHandler {
         return "${mp.get("taskTitle")}"
     }
 
-
-
 }

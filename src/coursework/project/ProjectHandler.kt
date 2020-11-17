@@ -71,7 +71,7 @@ class ProjectHandler {
         return display
     }
 
-    fun getCriticalPath(project: Project,  display : String) : String {
+    fun getKotlinCritical(project: Project, display : String) : String {
         var criticalPath = CriticalPathKot()
         var display = display
         if (project.tasksAssigned.isNotEmpty()) {
@@ -86,6 +86,26 @@ class ProjectHandler {
             }
         }
         return display
+    }
+
+    fun getScalaCritical(criticalTasks: MutableList<Task>, display: String): String {
+        var finalPosition = criticalTasks.size - 1
+        var display = display
+
+        display += "\n\nCritical Path Calculated with Scala:"
+        display += "\nCritical Cost:\n\t${criticalTasks[finalPosition].eet}"
+        display += "\nCritical Path:"
+        for (task: Task in criticalTasks){
+            display += "\n\t${task.taskTitle}"
+        }
+
+
+
+        return display
+    }
+
+    fun getDisplayNoTasks(project: Project): String{
+        return "Project Title:\n\t${project.projectTitle} \nTasks for this project:\n\tNo Tasks assigned yet"
     }
 
     fun updateProject(task: Task, project: Project): Project{

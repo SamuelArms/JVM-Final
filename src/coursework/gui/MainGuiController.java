@@ -18,13 +18,11 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextArea;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import scala.collection.mutable.ArrayBuffer;
 
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
 
 public class MainGuiController implements Initializable {
@@ -215,11 +213,23 @@ public class MainGuiController implements Initializable {
                 if (placeholder.equals(project.getProjectTitle())){
                     // set the info area to show the information of the project
                     if (kotlinCriticalPath.isSelected()){
-                        display = projectHandler.getCriticalPath(project, projectHandler.getDisplay(project));
+                        if (!project.getTasksAssigned().isEmpty()) {
+                            display = projectHandler.getKotlinCritical(project, projectHandler.getDisplay(project));
+                        } else {
+                            display = projectHandler.getDisplayNoTasks(project);
+                        }
+
                     }
                     if (scalaCriticalPath.isSelected()){
-                        ArrayList<Task> allTasks = (ArrayList<Task>) criticalPathKot.getAllTasksInProject(project);
-                        criticalPathSca.getCriticalPath(allTasks);
+                        ArrayList<Task> allTasks;
+                        ArrayList<Task> criticalTasks;
+                        if (!project.getTasksAssigned().isEmpty()){
+                            allTasks = (ArrayList<Task>) criticalPathKot.getAllTasksInProject(project);
+                            criticalTasks = criticalPathSca.getCriticalPath(allTasks);
+                            display = projectHandler.getScalaCritical(criticalTasks, projectHandler.getDisplay(project));
+                        } else {
+                            display = projectHandler.getDisplayNoTasks(project);
+                        }
                     }
                 }
             }
