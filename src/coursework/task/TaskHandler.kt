@@ -78,14 +78,14 @@ class TaskHandler {
                 if (task.predecessors.get(i) is Task) {
                     display += "${task.predecessors.get(i).taskTitle}"
                 } else {
-                    display += getPredecessorTaskTitle(task.predecessors.get(i) as MutableMap<*, *>)
+                    display += getTaskTitle(task.predecessors.get(i) as MutableMap<*, *>)
                 }
             }
         }
         return display
     }
 
-    fun getPredecessorTaskTitle(mp: MutableMap<*, *>) : String {
+    fun getTaskTitle(mp: MutableMap<*, *>) : String {
         // return the task title as a string from the map
         return "${mp.get("taskTitle")}"
     }

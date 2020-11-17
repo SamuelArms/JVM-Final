@@ -1,5 +1,7 @@
 package coursework.gui;
 
+import coursework.criticalpath.CriticalPathKot;
+import coursework.criticalpath.CriticalPathScala;
 import coursework.persistence.Persistence;
 import coursework.project.Project;
 import coursework.project.ProjectHandler;
@@ -16,11 +18,13 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextArea;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import scala.collection.mutable.ArrayBuffer;
 
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class MainGuiController implements Initializable {
@@ -44,6 +48,8 @@ public class MainGuiController implements Initializable {
     private final ProjectHandler projectHandler = new ProjectHandler();
     private final TeamHandler teamHandler = new TeamHandler();
     private final TaskHandler taskHandler = new TaskHandler();
+    private final CriticalPathScala criticalPathSca = new CriticalPathScala();
+    private final CriticalPathKot criticalPathKot = new CriticalPathKot();
 
     // Set up the writer for transferring data between scenes
     private FileWriter file;
@@ -212,6 +218,8 @@ public class MainGuiController implements Initializable {
                         display = projectHandler.getCriticalPath(project, projectHandler.getDisplay(project));
                     }
                     if (scalaCriticalPath.isSelected()){
+                        ArrayList<Task> allTasks = (ArrayList<Task>) criticalPathKot.getAllTasksInProject(project);
+                        criticalPathSca.getCriticalPath(allTasks);
                     }
                 }
             }

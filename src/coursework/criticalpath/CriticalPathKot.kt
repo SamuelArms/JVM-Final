@@ -40,7 +40,7 @@ class CriticalPathKot {
         // walk through the list forwards
         var updatedList = walkListAhead(allTasks)
         // walk through the list backwards
-        var (listWalkedBack, biggestCost) = WalkListBackwards(updatedList)
+        var (listWalkedBack, biggestCost) = walkListBackwards(updatedList)
 
         var criticalPathList = mutableListOf<Task>()
 
@@ -82,7 +82,7 @@ class CriticalPathKot {
         return allTasks
     }
 
-    fun WalkListBackwards(allTasks: List<Task>) : Pair<MutableList<Task>, Int> {
+    fun walkListBackwards(allTasks: List<Task>) : Pair<MutableList<Task>, Int> {
         //end task is the node with the biggest early finish time this therefore has to be the end node and the most important one
         // find the node with the biggest early finish time
         var endNodePos = 0
@@ -101,11 +101,6 @@ class CriticalPathKot {
         var empty = mutableListOf<Task>()
         var recursiveList = recursiveGetPredecessor(allTasks[endNodePos], empty)
 
-        println("walk list backwards")
-        for(task : Task in allTasks){
-            println("Task Title: ${task.taskTitle}\tEarly Start Time: ${task.est}\tEarly End Time: ${task.eet}\t" +
-                    "late Start Time: ${task.lst}\tlate End Time: ${task.let}")
-        }
         return Pair(recursiveList, allTasks[endNodePos].eet)
     }
 
