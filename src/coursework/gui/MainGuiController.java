@@ -12,6 +12,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.ListView;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextArea;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -31,6 +32,10 @@ public class MainGuiController implements Initializable {
     private ListView taskList;
     @FXML
     private TextArea infoArea;
+    @FXML
+    private RadioButton kotlinCriticalPath;
+    @FXML
+    private RadioButton scalaCriticalPath;
 
     // Define the master lists and the handlers for this instance of running
     private ArrayList<Project> projects = new ArrayList<>();
@@ -56,6 +61,16 @@ public class MainGuiController implements Initializable {
         // get the tasks from the save file and set the list
         tasks = taskHandler.getTasksFromSave();
         setTaskListView();
+
+        //Clear the data transfer from the previous session
+        try {
+            file = new FileWriter("src/coursework/data transfer.json");
+            // write an empty line
+            file.write("");
+            file.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void createProject() {
@@ -184,15 +199,22 @@ public class MainGuiController implements Initializable {
     public void viewProject() {
         teamList.getSelectionModel().clearSelection();
         taskList.getSelectionModel().clearSelection();
+        String display = "";
         if (projectList.getSelectionModel().getSelectedItem() != null) {
             String placeholder = projectList.getSelectionModel().getSelectedItem().toString();
             for (Project project: projects){
                 // find the project that has been selected
                 if (placeholder.equals(project.getProjectTitle())){
                     // set the info area to show the information of the project
-                    infoArea.setText(projectHandler.getDisplay(project));
+                    if (kotlinCriticalPath.isSelected()){
+                        display = projectHandler.getCriticalPath(project, projectHandler.getDisplay(project));
+                    }
+                    if (scalaCriticalPath.isSelected()){
+
+                    }
                 }
             }
+            infoArea.setText(display);
         }
     }
     public void viewTeam() {

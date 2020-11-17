@@ -1,6 +1,7 @@
 package coursework.gui;
 
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -9,9 +10,11 @@ import org.json.JSONObject;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
 
-public class ProjectCreationController {
+public class ProjectCreationController  implements Initializable {
 
     @FXML
     private TextField projectTitleField;
@@ -19,6 +22,19 @@ public class ProjectCreationController {
     private Button submitButton;
 
     private FileWriter file;
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        //Clear the data transfer from the previous session
+        try {
+            file = new FileWriter("src/coursework/data transfer.json");
+            // write an empty line
+            file.write("");
+            file.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     public void submit() {
         // Make a JSON object of the project so that the project can be transferred from scene to scene

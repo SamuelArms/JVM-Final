@@ -1,6 +1,7 @@
 package coursework.gui;
 
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -9,8 +10,10 @@ import org.json.JSONObject;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
-public class TeamCreationController {
+public class TeamCreationController  implements Initializable {
 
     @FXML
     private TextField teamNameField;
@@ -22,6 +25,19 @@ public class TeamCreationController {
     private Button submitButton;
 
     private FileWriter file;
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        //Clear the data transfer from the previous session
+        try {
+            file = new FileWriter("src/coursework/data transfer.json");
+            // write an empty line
+            file.write("");
+            file.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     public void submit() {
 
@@ -45,5 +61,4 @@ public class TeamCreationController {
         Stage stage = (Stage) submitButton.getScene().getWindow();
         stage.close();
     }
-
 }

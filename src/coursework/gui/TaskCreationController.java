@@ -53,8 +53,17 @@ public class TaskCreationController implements Initializable {
         setTeamListView();
         PopUpBox.display("Instructions", "Select the project this is a task for\n" +
                 "Select the team to complete this task\nIf this task is a successor Please select the task that has to be completed first");
-
+        //Clear the data transfer from the previous session
+        try {
+            file = new FileWriter("src/coursework/data transfer.json");
+            // write an empty line
+            file.write("");
+            file.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
+
 
     public void setProjectListView() {
         /*

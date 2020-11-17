@@ -43,7 +43,7 @@
                      <HBox.margin>
                         <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
                      </HBox.margin></RadioButton>
-                  <RadioButton layoutX="426.0" layoutY="18.0" mnemonicParsing="false" text="Scala Critical Path" toggleGroup="$criticalPath">
+                  <RadioButton fx:id="scalaCriticalPath" layoutX="426.0" layoutY="18.0" mnemonicParsing="false" text="Scala Critical Path" toggleGroup="$criticalPath">
                      <HBox.margin>
                         <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
                      </HBox.margin>

@@ -62,21 +62,23 @@ class ProjectHandler {
     fun getDisplay(project: Project): String{
         var taskHandler = TaskHandler()
         var tasks = taskHandler.getTasksFromSave()
-
-        var criticalPath = CriticalPathKot()
-
-
-
-        var display = "Project Title:\n\t ${project.projectTitle} \n Tasks for this project:"
+        var display = "Project Title:\n\t${project.projectTitle} \nTasks for this project:"
         for (task : Task in tasks){
             if (task.projectFor.equals(project.projectTitle)){
                 display += "\n\t${task.taskTitle}"
             }
         }
+        return display
+    }
+
+    fun getCriticalPath(project: Project,  display : String) : String {
+        var criticalPath = CriticalPathKot()
+        var display = display
         if (project.tasksAssigned.isNotEmpty()) {
             var allTasks = criticalPath.getAllTasksInProject(project)
             var (criticalPathList, biggestCost) = criticalPath.getCriticalPath(allTasks)
 
+            display += "\n\nCritical Path Calculated with Kotlin:"
             display += "\nCritical Cost:\n\t$biggestCost"
             display += "\nCritical Path:"
             for (task: Task in criticalPathList) {
@@ -84,7 +86,6 @@ class ProjectHandler {
             }
         }
         return display
-
     }
 
     fun updateProject(task: Task, project: Project): Project{

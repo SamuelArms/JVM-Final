@@ -31,6 +31,15 @@ public class TaskEditController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         Task taskPassed = taskHandler.createTaskFromTransferFile();
         infoArea.setText(taskHandler.getDisplay(taskPassed));
+        //Clear the data transfer from the previous session
+        try {
+            file = new FileWriter("src/coursework/data transfer.json");
+            // write an empty line
+            file.write("");
+            file.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void submit (){
