@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -52,6 +53,9 @@ public class TeamEditController implements Initializable {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            // Close the GUI
+            Stage stage = (Stage) submitButton.getScene().getWindow();
+            stage.close();
         }
     }
 }

@@ -1,1 +1,1 @@
-{"members":["a","b"],"teamTitle":"team"}
+{"members":["a","b","c"],"teamTitle":"team"}

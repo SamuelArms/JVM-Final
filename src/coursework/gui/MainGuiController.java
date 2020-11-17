@@ -212,7 +212,6 @@ public class MainGuiController implements Initializable {
                         display = projectHandler.getCriticalPath(project, projectHandler.getDisplay(project));
                     }
                     if (scalaCriticalPath.isSelected()){
-
                     }
                 }
             }
@@ -351,7 +350,9 @@ public class MainGuiController implements Initializable {
             }
             count += 1;
         }
-
+        // save and update the gui
+        save();
+        setTeamListView();
     }
 
 
@@ -377,6 +378,18 @@ public class MainGuiController implements Initializable {
         for (Task task: tasks){
             // add the task titles to the list view
             taskList.getItems().add(task.getTaskTitle());
+        }
+    }
+
+    public void kotlinPath(){
+        if (projectList.getSelectionModel().getSelectedItem() != null){
+            viewProject();
+        }
+    }
+
+    public void scalaPath(){
+        if (projectList.getSelectionModel().getSelectedItem() != null){
+            viewProject();
         }
     }
 }
