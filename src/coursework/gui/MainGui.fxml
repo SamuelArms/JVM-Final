@@ -26,7 +26,7 @@
                                 <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
                             </HBox.margin>
                         </Button>
-                        <Button layoutX="223.0" layoutY="18.0" mnemonicParsing="false" onAction="#editItem" text="Edit">
+                        <Button layoutX="223.0" layoutY="18.0" mnemonicParsing="false" onAction="#editItem" prefHeight="25.0" prefWidth="55.0" text="Edit">
                             <HBox.margin>
                                 <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
                             </HBox.margin>

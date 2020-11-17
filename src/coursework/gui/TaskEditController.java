@@ -42,20 +42,24 @@ public class TaskEditController implements Initializable {
         }
     }
 
-    public void submit (){
-        Task taskPassed = taskHandler.createTaskFromTransferFile();
-        taskPassed.setDuration(Integer.parseInt(newDurationField.getText()));
-        String saveString = taskHandler.getSaveString(taskPassed);
-        try {
-            // Write the tasks to a transfer file
-            file = new FileWriter("src/coursework/data transfer.json");
-            file.write(saveString);
-            file.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+    public void submit () {
+        if (newDurationField.getText().equals("")) {
+            PopUpBox.display("Edit error", "Please enter the new duration for thwe task");
+        } else {
+            Task taskPassed = taskHandler.createTaskFromTransferFile();
+            taskPassed.setDuration(Integer.parseInt(newDurationField.getText()));
+            String saveString = taskHandler.getSaveString(taskPassed);
+            try {
+                // Write the tasks to a transfer file
+                file = new FileWriter("src/coursework/data transfer.json");
+                file.write(saveString);
+                file.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            // Close the GUI
+            Stage stage = (Stage) submitButton.getScene().getWindow();
+            stage.close();
         }
-        // Close the GUI
-        Stage stage = (Stage) submitButton.getScene().getWindow();
-        stage.close();
     }
 }

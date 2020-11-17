@@ -193,6 +193,7 @@ public class MainGuiController implements Initializable {
             editTask();
         }
         if (projectList.getSelectionModel().getSelectedItem() != null) {
+            PopUpBox.display("Error", "Projects can not be edited");
         }
     }
 

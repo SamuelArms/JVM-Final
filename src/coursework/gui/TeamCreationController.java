@@ -40,25 +40,30 @@ public class TeamCreationController  implements Initializable {
     }
 
     public void submit() {
+        if (teamNameField.getText().equals("") || teamMemberOneField.getText().equals("") || teamMemberTwoField.getText().equals("")){
+            PopUpBox.display("Creation Error", "Please ensure all fields are filled out " +
+                    "As all fields are needed to create a team");
+        } else {
 
-        // Make the team as a JSON object so that it can be saved to the transfer file
-        JSONArray memberArray = new JSONArray();
-        memberArray.put(teamMemberOneField.getText());
-        memberArray.put(teamMemberTwoField.getText());
-        String jsonString = new JSONObject()
-                .put("teamTitle", teamNameField.getText())
-                .put("members", memberArray).toString();
-        try {
-            // Write the team to the transfer file
-            file = new FileWriter("src/coursework/data transfer.json");
-            file.write(jsonString);
-            file.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+            // Make the team as a JSON object so that it can be saved to the transfer file
+            JSONArray memberArray = new JSONArray();
+            memberArray.put(teamMemberOneField.getText());
+            memberArray.put(teamMemberTwoField.getText());
+            String jsonString = new JSONObject()
+                    .put("teamTitle", teamNameField.getText())
+                    .put("members", memberArray).toString();
+            try {
+                // Write the team to the transfer file
+                file = new FileWriter("src/coursework/data transfer.json");
+                file.write(jsonString);
+                file.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            //Close this GUI
+            Stage stage = (Stage) submitButton.getScene().getWindow();
+            stage.close();
         }
-
-        //Close this GUI
-        Stage stage = (Stage) submitButton.getScene().getWindow();
-        stage.close();
     }
 }

@@ -102,36 +102,40 @@ public class TaskCreationController implements Initializable {
     }
 
     public void submit() {
-        ArrayList<Task> empty = new ArrayList<>();
-        ArrayList<Task> predecessors = new ArrayList<>();
-        JSONObject jsonObj = new JSONObject();
-        jsonObj.put("taskTitle", taskTitleField.getText());
-        jsonObj.put("teamAssigned", teamListView.getSelectionModel().getSelectedItem().toString());
-        jsonObj.put("projectFor", projectListView.getSelectionModel().getSelectedItem().toString());
-        jsonObj.put("duration", Integer.parseInt(taskDurationField.getText()));
-        if (taskListView.getSelectionModel().getSelectedItem() == null) {
-            jsonObj.put("predecessors", empty);
-            jsonObj.put("successors", empty);
+        if (projectListView.getSelectionModel().getSelectedItem() == null || teamListView.getSelectionModel().getSelectedItem() == null) {
+            PopUpBox.display("Creation error", "Please at minimum select a Project to assign the task to\nPlease also select a team for the task to be completed by");
         } else {
-            for (int i = 0; i < tasks.size(); i++) {
-                if (tasks.get(i).getTaskTitle().equals(taskListView.getSelectionModel().getSelectedItem().toString())){
-                    predecessors.add(tasks.get(i));
+            ArrayList<Task> empty = new ArrayList<>();
+            ArrayList<Task> predecessors = new ArrayList<>();
+            JSONObject jsonObj = new JSONObject();
+            jsonObj.put("taskTitle", taskTitleField.getText());
+            jsonObj.put("teamAssigned", teamListView.getSelectionModel().getSelectedItem().toString());
+            jsonObj.put("projectFor", projectListView.getSelectionModel().getSelectedItem().toString());
+            jsonObj.put("duration", Integer.parseInt(taskDurationField.getText()));
+            if (taskListView.getSelectionModel().getSelectedItem() == null) {
+                jsonObj.put("predecessors", empty);
+                jsonObj.put("successors", empty);
+            } else {
+                for (int i = 0; i < tasks.size(); i++) {
+                    if (tasks.get(i).getTaskTitle().equals(taskListView.getSelectionModel().getSelectedItem().toString())) {
+                        predecessors.add(tasks.get(i));
+                    }
                 }
+                jsonObj.put("predecessors", predecessors);
+                jsonObj.put("successors", empty);
             }
-            jsonObj.put("predecessors", predecessors);
-            jsonObj.put("successors", empty);
+            String jsonString = jsonObj.toString();
+            try {
+                // Write the tasks to a transfer file
+                file = new FileWriter("src/coursework/data transfer.json");
+                file.write(jsonString);
+                file.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            // Close the GUI
+            Stage stage = (Stage) submitButton.getScene().getWindow();
+            stage.close();
         }
-        String jsonString = jsonObj.toString();
-        try {
-            // Write the tasks to a transfer file
-            file = new FileWriter("src/coursework/data transfer.json");
-            file.write(jsonString);
-            file.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        // Close the GUI
-        Stage stage = (Stage) submitButton.getScene().getWindow();
-        stage.close();
     }
 }
