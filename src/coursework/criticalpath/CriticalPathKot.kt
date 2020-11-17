@@ -121,8 +121,6 @@ class CriticalPathKot {
         }
     }
 
-
-
     fun createTaskFromHashMap(map: MutableMap<*, *>): Task{
         val taskHandler = TaskHandler()
         val taskTitle = map["taskTitle"].toString()
@@ -138,18 +136,5 @@ class CriticalPathKot {
     fun getSuccessors(map: MutableMap<*, *>): List<Task>{
         return  map["successors"] as List<Task>
     }
-
-    fun getPredecessors(map: MutableMap<*, *>): List<Task>{
-        return  map["successors"] as List<Task>
-    }
-
-    fun getPredecessorsTasks(task: Task): ArrayList<Task>{
-        return task.predecessors as ArrayList<Task>
-    }
-
-    fun getSuccessorsTask(task: Task): ArrayList<Task>{
-        return task.successors as ArrayList<Task>
-    }
-
 
 }
