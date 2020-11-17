@@ -188,6 +188,7 @@ public class MainGuiController implements Initializable {
 
     public void editItem() {
         if (teamList.getSelectionModel().getSelectedItem() != null) {
+            editTeam();
         }
         if (taskList.getSelectionModel().getSelectedItem() != null) {
             editTask();
@@ -307,6 +308,50 @@ public class MainGuiController implements Initializable {
         setTeamListView();
         setProjectListView();
         setTaskListView();
+    }
+
+    public void editTeam(){
+        // get the title of the task that is updating
+        String updateTeam = teamList.getSelectionModel().getSelectedItem().toString();
+        for (Team team: teams){
+            if (updateTeam.equals(team.getTeamTitle())){
+                // get save string of the task
+                String transferString = teamHandler.getSaveString(team);
+                try {
+                    // write the task to the data transfer file
+                    file = new FileWriter("src/coursework/data transfer.json");
+                    file.write(transferString);
+                    file.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        // show the new gui
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(getClass().getResource("TeamEdit.fxml"));
+        try {
+            Scene scene = new Scene(fxmlLoader.load(), 250, 400);
+            Stage stage = new Stage();
+            stage.setTitle("Team Edit");
+            stage.setScene(scene);
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.showAndWait();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // get the updated task from the transfer file
+        Team teamFromSave = teamHandler.createTeamFromTransferFile();
+        int count = 0;
+        for (Team team: teams){
+            if (teamFromSave.getTeamTitle().equals(team.getTeamTitle())){
+                // set the updated task in the task list
+                teams.set(count, teamFromSave);
+            }
+            count += 1;
+        }
+
     }
 
 
