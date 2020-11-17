@@ -1,12 +1,28 @@
 package coursework.criticalpath
 
 import java.util
+
+import coursework.project.Project
 import coursework.task.{Task, TaskHandler}
+
 import scala.collection.mutable
 import scala.collection.mutable.ArrayBuffer
 import scala.jdk.CollectionConverters.ListHasAsScala
 
 class CriticalPathScala {
+
+  def getAllTasks(project : Project): mutable.Buffer[Task] ={
+    var allTasks = new ArrayBuffer[Task]()
+    for (i <- 0 to project.getTasksAssigned.size()){
+      if (project.getTasksAssigned.get(i).isInstanceOf[Task]){
+        allTasks.addOne(project.getTasksAssigned.get(i))
+      } else {
+        allTasks.addOne(createTaskFromHashMap(project.getTasksAssigned.get(i).asInstanceOf[util.HashMap[Any,Any]]))
+      }
+    }
+
+    allTasks
+  }
 
   def getCriticalPath(allTasks: util.ArrayList[Task]) : util.ArrayList[Task] ={
     var listWalkedForwards = walkListAhead(allTasks)

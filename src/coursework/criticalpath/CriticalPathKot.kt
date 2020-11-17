@@ -15,21 +15,9 @@ class CriticalPathKot {
             if (project.tasksAssigned.get(i) is Task) {
                 // if the task found is stored as a task add it to the list
                 allTasksInProject.add(project.tasksAssigned.get(i))
-                // get the list of successors the task has
-                var successorTasks = project.tasksAssigned.get(i).successors
-                for (j in successorTasks.indices){
-                    // for every task in the successor list create the task from a map and add it to the list
-                    allTasksInProject.add(createTaskFromHashMap(successorTasks.get(j) as MutableMap<*, *>))
-                }
             } else {
                 // if the base task is not stored as a task create it from the map
                 allTasksInProject.add(createTaskFromHashMap(project.tasksAssigned.get(i) as MutableMap<*, *>))
-                // get the successors of this task
-                var successorList = getSuccessors(project.tasksAssigned.get(i) as MutableMap<*, *>)
-                for (j in successorList.indices) {
-                    // loop through the successor list creating the tasks and adding them to the list of tasks
-                    allTasksInProject.add(createTaskFromHashMap(successorList.get(j) as MutableMap<*, *>))
-                }
             }
         }
 
