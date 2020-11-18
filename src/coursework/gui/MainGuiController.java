@@ -192,12 +192,15 @@ public class MainGuiController implements Initializable {
 
     public void editItem() {
         if (teamList.getSelectionModel().getSelectedItem() != null) {
+            // if a team is selected call the edit team function
             editTeam();
         }
         if (taskList.getSelectionModel().getSelectedItem() != null) {
+            // if a task is selected call the edit task function
             editTask();
         }
         if (projectList.getSelectionModel().getSelectedItem() != null) {
+            // projects cant be edited yet so display a popup menu
             PopUpBox.display("Error", "Projects can not be edited");
         }
     }
@@ -206,6 +209,7 @@ public class MainGuiController implements Initializable {
         teamList.getSelectionModel().clearSelection();
         taskList.getSelectionModel().clearSelection();
         String display = "";
+        // make sure that a valid project was selected
         if (projectList.getSelectionModel().getSelectedItem() != null) {
             String placeholder = projectList.getSelectionModel().getSelectedItem().toString();
             for (Project project: projects){
@@ -213,21 +217,30 @@ public class MainGuiController implements Initializable {
                 if (placeholder.equals(project.getProjectTitle())){
                     // set the info area to show the information of the project
                     if (kotlinCriticalPath.isSelected()){
+                        // if kotlin was selected display the critical path with the critical path calculated by kotlin
                         if (!project.getTasksAssigned().isEmpty()) {
                             display = projectHandler.getKotlinCritical(project, projectHandler.getDisplay(project));
                         } else {
+                            // kotlin is selected but no tasks have been added so dont get the critical path yet
                             display = projectHandler.getDisplayNoTasks(project);
                         }
 
                     }
+                    // if the critical path needs to be worked out with scala code
                     if (scalaCriticalPath.isSelected()){
+                        // define the array lists to be worked with
                         ArrayList<Task> allTasks;
                         ArrayList<Task> criticalTasks;
                         if (!project.getTasksAssigned().isEmpty()){
+                            // pass the project to scala where a ArrayBuffer is filled with the tasks
+                            // the ArrayBuffer is then turned into a Java ArrayList with a for loop
                             allTasks = criticalPathSca.getAllTasks(project);
+                            // get the critical path on the scala side this ArrayList is converted into a scala datatype the Buffer
                             criticalTasks = criticalPathSca.getCriticalPath(allTasks);
+                            // when the project has tasks workout the critical path with scala and then display the information
                             display = projectHandler.getScalaCritical(criticalTasks, projectHandler.getDisplay(project));
                         } else {
+                            // set the display when no tasks are set yet
                             display = projectHandler.getDisplayNoTasks(project);
                         }
                     }
@@ -239,6 +252,7 @@ public class MainGuiController implements Initializable {
     public void viewTeam() {
         projectList.getSelectionModel().clearSelection();
         taskList.getSelectionModel().clearSelection();
+        // ensure that a valid team has been selected
         if (teamList.getSelectionModel().getSelectedItem() != null) {
             String placeholder = teamList.getSelectionModel().getSelectedItem().toString();
             for (Team team: teams){
@@ -255,6 +269,7 @@ public class MainGuiController implements Initializable {
     public void viewTask() {
         teamList.getSelectionModel().clearSelection();
         projectList.getSelectionModel().clearSelection();
+        // ensure a valid task has been selected
         if (taskList.getSelectionModel().getSelectedItem() != null){
             String placeholder = taskList.getSelectionModel().getSelectedItem().toString();
             for (Task task: tasks){
@@ -401,12 +416,14 @@ public class MainGuiController implements Initializable {
 
     public void kotlinPath(){
         if (projectList.getSelectionModel().getSelectedItem() != null){
+            // update the project information to be shown with kotlin critical path
             viewProject();
         }
     }
 
     public void scalaPath(){
         if (projectList.getSelectionModel().getSelectedItem() != null){
+            // update the project information to be shown with scala critical path
             viewProject();
         }
     }

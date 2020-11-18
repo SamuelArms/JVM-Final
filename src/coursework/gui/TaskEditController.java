@@ -29,16 +29,23 @@ public class TaskEditController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        // get the task from the transfer file
         Task taskPassed = taskHandler.createTaskFromTransferFile();
+        // set the info area to display the passed task
         infoArea.setText(taskHandler.getDisplay(taskPassed));
     }
 
     public void submit () {
+        // ensure the needed information is provided
         if (newDurationField.getText().equals("")) {
+            // display popup with the error message
             PopUpBox.display("Edit error", "Please enter the new duration for thwe task");
         } else {
+            // get the task from the transfer file
             Task taskPassed = taskHandler.createTaskFromTransferFile();
+            // set the new duration of the task
             taskPassed.setDuration(Integer.parseInt(newDurationField.getText()));
+            // change the task back into the string
             String saveString = taskHandler.getSaveString(taskPassed);
             try {
                 // Write the tasks to a transfer file

@@ -28,11 +28,14 @@ public class TeamEditController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        // get the team from the transfer file
         currentTeam = teamHandler.createTeamFromTransferFile();
     }
 
     public void addMember(){
+        // ensure all the needed information works
         if (memberField.getText().equals("")){
+            // display the pop up error message
             PopUpBox.display("Edit Error","Please ensure that a new members name has been provided");
         } else {
             currentTeam.getMembers().add(memberField.getText());

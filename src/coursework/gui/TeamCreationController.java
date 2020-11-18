@@ -40,7 +40,9 @@ public class TeamCreationController  implements Initializable {
     }
 
     public void submit() {
+        // ensure that all the needed information is provided
         if (teamNameField.getText().equals("") || teamMemberOneField.getText().equals("") || teamMemberTwoField.getText().equals("")){
+            // display a popup if not
             PopUpBox.display("Creation Error", "Please ensure all fields are filled out " +
                     "As all fields are needed to create a team");
         } else {

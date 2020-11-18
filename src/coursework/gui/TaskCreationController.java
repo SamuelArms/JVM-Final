@@ -51,6 +51,7 @@ public class TaskCreationController implements Initializable {
         teams = teamHandler.getTeamsFromSave();
         setProjectListView();
         setTeamListView();
+        // display a popupbox with the instructions on how to use this screen
         PopUpBox.display("Instructions", "Select the project this is a task for\n" +
                 "Select the team to complete this task\nIf this task is a successor Please select the task that has to be completed first");
         //Clear the data transfer from the previous session
@@ -91,10 +92,14 @@ public class TaskCreationController implements Initializable {
 
     public void setTaskListView() {
         taskListView.getItems().clear();
+        // check if a project is selected
         if (projectListView.getSelectionModel().getSelectedItem() != null) {
+            // get the project title
             String projectSelected = projectListView.getSelectionModel().getSelectedItem().toString();
             for (int i = 0; i < tasks.size(); i++) {
+                // if the task is for the project selected
                 if (tasks.get(i).getProjectFor().equals(projectSelected)) {
+                    // add the task to the task list
                     taskListView.getItems().add(tasks.get(i).getTaskTitle());
                 }
             }
@@ -102,9 +107,12 @@ public class TaskCreationController implements Initializable {
     }
 
     public void submit() {
+        // ensure all the needed information is selected
         if (projectListView.getSelectionModel().getSelectedItem() == null || teamListView.getSelectionModel().getSelectedItem() == null) {
+            // pop up with a error message
             PopUpBox.display("Creation error", "Please at minimum select a Project to assign the task to\nPlease also select a team for the task to be completed by");
         } else {
+            // addd the needed base information for the task
             ArrayList<Task> empty = new ArrayList<>();
             ArrayList<Task> predecessors = new ArrayList<>();
             JSONObject jsonObj = new JSONObject();
@@ -112,15 +120,20 @@ public class TaskCreationController implements Initializable {
             jsonObj.put("teamAssigned", teamListView.getSelectionModel().getSelectedItem().toString());
             jsonObj.put("projectFor", projectListView.getSelectionModel().getSelectedItem().toString());
             jsonObj.put("duration", Integer.parseInt(taskDurationField.getText()));
+            // find out if this task is a successor of a different task
             if (taskListView.getSelectionModel().getSelectedItem() == null) {
+                // if it is not there is no need for predecessors
                 jsonObj.put("predecessors", empty);
                 jsonObj.put("successors", empty);
             } else {
+                // if it is a successor
                 for (int i = 0; i < tasks.size(); i++) {
                     if (tasks.get(i).getTaskTitle().equals(taskListView.getSelectionModel().getSelectedItem().toString())) {
+                        // add the task it is a successor of to the predecessors list
                         predecessors.add(tasks.get(i));
                     }
                 }
+                // put the task it is a successor od in the predecessor list
                 jsonObj.put("predecessors", predecessors);
                 jsonObj.put("successors", empty);
             }
