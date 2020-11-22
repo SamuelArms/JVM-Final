@@ -144,15 +144,24 @@ public class MainGuiController implements Initializable {
             placeholderTask = taskHandler.createTaskFromTransferFile();
             placeholderProjectTitle = placeholderTask.getProjectFor();
             // For loop to find the project the task is assigned to
-            int count = 0;
+            for (int i = 0; i < projects.size(); i++) {
+                if (placeholderProjectTitle.equals(projects.get(i).getProjectTitle())){
+                    placeholderProject = projectHandler.addTask(projects.get(i), placeholderTask);
+                    projects.set(i, placeholderProject);
+
+                }
+            }
+            /*
             for (Project project: projects) {
                 if (placeholderProjectTitle.equals(project.getProjectTitle())) {
                     placeholderProject = projectHandler.addTask(project, placeholderTask);
                     // set the updated project in the place of the old project in the list
-                    projects.set(count, placeholderProject);
+                    projects.set(count - 1, placeholderProject);
                 }
                 count += count +1;
             }
+
+             */
             // Set the GUI to show updated values and save
             setTaskListView();
             setProjectListView();

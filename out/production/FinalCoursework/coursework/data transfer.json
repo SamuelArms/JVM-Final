@@ -1,0 +1,1 @@
+{"duration":3,"predecessors":[{"duration":2,"earlyFinishTime":-1,"lateStartTime":0,"predecessors":[],"lateFinishTime":0,"projectFor":"project 3","teamAssigned":"team 3","earlyStartTime":0,"successors":[],"taskTitle":"task 3"}],"teamAssigned":"team 3","projectFor":"project 3","successors":[],"taskTitle":"successor 3"}
