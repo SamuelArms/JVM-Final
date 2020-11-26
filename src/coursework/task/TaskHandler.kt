@@ -1,9 +1,8 @@
 package coursework.task
 
 import org.json.JSONObject
-import java.io.BufferedReader
+import coursework.transfer.TransferReaderWriter
 import java.io.File
-import java.io.FileReader
 import java.util.ArrayList
 
 class TaskHandler {
@@ -12,8 +11,8 @@ class TaskHandler {
 
     // create a task with all the needed values
     fun createTask(taskTitle: String, teamAssigned: String, projectFor: String,
-                   duration: Int, predecessors: List<Task>, successors: List<Task>): Task {
-        return Task(taskTitle, teamAssigned, projectFor, duration, predecessors, successors)
+                   duration: Int, predecessors: List<Task>, successors: List<Task>, progress: Int): Task {
+        return Task(taskTitle, teamAssigned, projectFor, duration, predecessors, successors, progress)
 
     }
 
@@ -29,9 +28,10 @@ class TaskHandler {
                 var duration = jsonObj.getInt("duration")
                 var predecessors = jsonObj.getJSONArray("predecessors").toList()
                 var successors = jsonObj.getJSONArray("successors").toList()
+                var progress = jsonObj.getInt("progress")
                 // create the task and add it to the tasks list within the lambda expression
                 tasks.add(createTask(taskTitle, teamAssigned, projectFor,
-                        duration, predecessors as List<Task>, successors as List<Task>))
+                        duration, predecessors as List<Task>, successors as List<Task>, progress))
             }
         }
         // return the list of tasks
@@ -47,9 +47,10 @@ class TaskHandler {
 
 
     fun createTaskFromTransferFile(): Task {
+        val transferReaderWriter = TransferReaderWriter()
+
         // Read the line from the
-        var reader = BufferedReader(FileReader("src/coursework/data transfer.json"))
-        var line = reader.readLine()
+        var line = transferReaderWriter.readTransfer()
         // make json object from the line
         val jsonObj = JSONObject(line)
         // get the needed values
@@ -59,9 +60,10 @@ class TaskHandler {
         var duration = jsonObj.getInt("duration")
         var predecessors = jsonObj.getJSONArray("predecessors").toList()
         var successors = jsonObj.getJSONArray("successors").toList()
+        var progress = jsonObj.getInt("progress")
         // create a base task object from these values
         return createTask(taskTitle, teamAssigned, projectFor,
-                duration, predecessors as List<Task>, successors as List<Task>)
+                duration, predecessors as List<Task>, successors as List<Task>, progress)
     }
 
     fun getDisplay(task: Task): String {
@@ -70,12 +72,12 @@ class TaskHandler {
         if (task.predecessors.size == 0) {
              display = "TaskTitle:\n\t${task.taskTitle}\n" +
                     "Duration:\n\t ${task.duration}\nTeam Assigned:\n\t${task.teamAssigned}" +
-                    "\nProject For: \n\t ${task.projectFor}\nPredecessor Task:\n\tThis is a base task"
+                    "\nProject For: \n\t ${task.projectFor}\nProgress: \n\t ${task.progress}%\nPredecessor Task:\n\tThis is a base task"
         } else {
             // if the task is found to be a successor task then also add the task that has to be completed before it
             display = "TaskTitle:\n\t${task.taskTitle}\n" +
                     "Duration:\n\t ${task.duration}\nTeam Assigned:\n\t${task.teamAssigned}" +
-                    "\nProject For: \n\t ${task.projectFor}\nPredecessor Task:\n\t"
+                    "\nProject For: \n\t ${task.projectFor}\nProgress: \n\t${task.progress}%\nPredecessor Task:\n\t"
             for (i in task.predecessors.indices) {
                 if (task.predecessors.get(i) is Task) {
                     // if the predecessor task is stored as a task simply ass the title to the string

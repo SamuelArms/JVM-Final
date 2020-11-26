@@ -4,6 +4,7 @@ abstract class Persistence {
 
     companion object{
         // companion object to ensure the file persistence is implemented
+        //
         fun createFilePersistence() = FilePersistence()
     }
 

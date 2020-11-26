@@ -7,11 +7,12 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import coursework.transfer.TransferReaderWriter;
 
-import java.io.FileWriter;
-import java.io.IOException;
+
 import java.net.URL;
 import java.util.ResourceBundle;
+
 
 public class TeamEditController implements Initializable {
 
@@ -21,8 +22,8 @@ public class TeamEditController implements Initializable {
     private Button submitButton;
 
     private TeamHandler teamHandler = new TeamHandler();
-    private FileWriter file;
     private Team currentTeam;
+    private TransferReaderWriter transferReaderWriter = new TransferReaderWriter();
 
 
 
@@ -40,14 +41,7 @@ public class TeamEditController implements Initializable {
         } else {
             currentTeam.getMembers().add(memberField.getText());
             String saveString = teamHandler.getSaveString(currentTeam);
-            try {
-                file = new FileWriter("src/coursework/data transfer.json");
-                // write an empty line
-                file.write(saveString);
-                file.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            transferReaderWriter.writeTransfer(saveString);
             // Close the GUI
             Stage stage = (Stage) submitButton.getScene().getWindow();
             stage.close();

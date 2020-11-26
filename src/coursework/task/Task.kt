@@ -7,13 +7,15 @@ class Task(
         var projectFor: String,
         var duration: Int,
         var predecessors: List<Task>,
-        var successors: List<Task>
+        var successors: List<Task>,
+        var progress: Int
 ) {
     // Extra values that do not need to be declared in the primary constructor
     var earlyStartTime = 0
     var lateStartTime = 0
     var earlyFinishTime = -1
     var lateFinishTime = 0
+    var projectPercent = 0
 
 
 }

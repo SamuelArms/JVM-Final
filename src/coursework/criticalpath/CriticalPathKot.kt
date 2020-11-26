@@ -63,6 +63,7 @@ class CriticalPathKot {
             // set the current tasks early end time as the early start time plus the duration
             allTasks[i].earlyFinishTime = allTasks[i].earlyStartTime + allTasks[i].duration
         }
+
         return allTasks
     }
 
@@ -118,9 +119,10 @@ class CriticalPathKot {
         val duration = map["duration"] as Int
         val predecessors = map["predecessors"] as List<Task>
         val successors = map["successors"] as List<Task>
+        val progress = map["progress"] as Int
         // return the elements as a task
         return taskHandler.createTask(taskTitle, teamAssigned, projectFor, duration,
-                predecessors, successors)
+                predecessors, successors, progress)
     }
 
 }

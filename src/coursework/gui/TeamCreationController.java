@@ -7,9 +7,8 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import coursework.transfer.TransferReaderWriter;
 
-import java.io.FileWriter;
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -24,19 +23,12 @@ public class TeamCreationController  implements Initializable {
     @FXML
     private Button submitButton;
 
-    private FileWriter file;
+    private TransferReaderWriter transferReaderWriter =  new TransferReaderWriter();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         //Clear the data transfer from the previous session
-        try {
-            file = new FileWriter("src/coursework/data transfer.json");
-            // write an empty line
-            file.write("");
-            file.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        transferReaderWriter.writeTransfer("");
     }
 
     public void submit() {
@@ -54,14 +46,7 @@ public class TeamCreationController  implements Initializable {
             String jsonString = new JSONObject()
                     .put("teamTitle", teamNameField.getText())
                     .put("members", memberArray).toString();
-            try {
-                // Write the team to the transfer file
-                file = new FileWriter("src/coursework/data transfer.json");
-                file.write(jsonString);
-                file.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            transferReaderWriter.writeTransfer(jsonString);
 
             //Close this GUI
             Stage stage = (Stage) submitButton.getScene().getWindow();

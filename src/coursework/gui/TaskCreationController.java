@@ -13,9 +13,8 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import org.json.JSONObject;
+import coursework.transfer.TransferReaderWriter;
 
-import java.io.FileWriter;
-import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -40,8 +39,7 @@ public class TaskCreationController implements Initializable {
     private ProjectHandler projectHandler = new ProjectHandler();
     private TaskHandler taskHandler = new TaskHandler();
     private TeamHandler teamHandler = new TeamHandler();
-    private FileWriter file;
-
+    private TransferReaderWriter transferReaderWriter = new TransferReaderWriter();
 
 
     @Override
@@ -55,14 +53,7 @@ public class TaskCreationController implements Initializable {
         PopUpBox.display("Instructions", "Select the project this is a task for\n" +
                 "Select the team to complete this task\nIf this task is a successor Please select the task that has to be completed first");
         //Clear the data transfer from the previous session
-        try {
-            file = new FileWriter("src/coursework/data transfer.json");
-            // write an empty line
-            file.write("");
-            file.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        transferReaderWriter.writeTransfer("");
     }
 
 
@@ -112,7 +103,9 @@ public class TaskCreationController implements Initializable {
             // pop up with a error message
             PopUpBox.display("Creation error", "Please at minimum select a Project to assign the task to\nPlease also select a team for the task to be completed by");
         } else {
-            // addd the needed base information for the task
+            try {
+                Integer.parseInt(taskDurationField.getText());
+            // add the needed base information for the task
             ArrayList<Task> empty = new ArrayList<>();
             ArrayList<Task> predecessors = new ArrayList<>();
             JSONObject jsonObj = new JSONObject();
@@ -120,6 +113,7 @@ public class TaskCreationController implements Initializable {
             jsonObj.put("teamAssigned", teamListView.getSelectionModel().getSelectedItem().toString());
             jsonObj.put("projectFor", projectListView.getSelectionModel().getSelectedItem().toString());
             jsonObj.put("duration", Integer.parseInt(taskDurationField.getText()));
+            jsonObj.put("progress", 0);
             // find out if this task is a successor of a different task
             if (taskListView.getSelectionModel().getSelectedItem() == null) {
                 // if it is not there is no need for predecessors
@@ -138,17 +132,13 @@ public class TaskCreationController implements Initializable {
                 jsonObj.put("successors", empty);
             }
             String jsonString = jsonObj.toString();
-            try {
-                // Write the tasks to a transfer file
-                file = new FileWriter("src/coursework/data transfer.json");
-                file.write(jsonString);
-                file.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            transferReaderWriter.writeTransfer(jsonString);
             // Close the GUI
             Stage stage = (Stage) submitButton.getScene().getWindow();
             stage.close();
+            } catch(NumberFormatException e){
+                PopUpBox.display("Edit error", "Duration must be a whole number to indicate the amount of days");
+            }
         }
     }
 }

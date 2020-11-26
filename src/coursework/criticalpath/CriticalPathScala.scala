@@ -15,7 +15,7 @@ class CriticalPathScala {
     /*
     get all of the tasks assigned to this project and return it in as a java Util list
     this is done so that the list of tasks can be passed back to a java class error free
-     */
+    */
     // declare an ArrayBuffer of the Task data type
     var allTasks = new ArrayBuffer[Task]()
     // loop over every task assigned
@@ -113,7 +113,7 @@ class CriticalPathScala {
     if (task.getPredecessors.isEmpty){
       // if not break out of the recursion returning the critical list
       taskList += task
-      return taskList
+      taskList
     } else {
       // if the task is not the base task
       // add it to the task list
@@ -121,7 +121,7 @@ class CriticalPathScala {
       // create the next task to search
       var taskToSearch = createTaskFromHashMap(task.getPredecessors.get(0).asInstanceOf[util.HashMap[Any,Any]])
       // recursively call this function
-      return recursiveGetPredecessor(taskToSearch, taskList)
+      recursiveGetPredecessor(taskToSearch, taskList)
     }
   }
 
@@ -141,9 +141,11 @@ class CriticalPathScala {
     var duration = Integer.parseInt(map.get("duration").toString)
     var predecessors = map.get("predecessors").asInstanceOf[util.List[Task]]
     var successors = map.get("successors").asInstanceOf[util.List[Task]]
+    var progress = Integer.parseInt(map.get("progress").toString)
+
 
     // create a task from these values and return the task
-    taskHandler.createTask(taskTitle,teamAssigned,projectFor,duration,predecessors,successors)
+    taskHandler.createTask(taskTitle,teamAssigned,projectFor,duration,predecessors,successors,progress)
   }
 
 }

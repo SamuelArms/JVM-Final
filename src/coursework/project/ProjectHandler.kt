@@ -4,17 +4,16 @@ import coursework.criticalpath.CriticalPathKot
 import coursework.task.Task
 import coursework.task.TaskHandler
 import org.json.JSONObject
-import java.io.BufferedReader
+import coursework.transfer.TransferReaderWriter
 import java.io.File
-import java.io.FileReader
 
 class ProjectHandler {
 
     private val projects = ArrayList<Project>()
 
     // create a project with the needed values
-    fun createProject(projectTitle: String, tasksAssigned: List<Task>): Project{
-        return Project(projectTitle, tasksAssigned)
+    fun createProject(projectTitle: String, tasksAssigned: List<Task>, progress: Int): Project{
+        return Project(projectTitle, tasksAssigned, progress)
     }
 
     fun getProjectsFromSave(): ArrayList<Project> {
@@ -25,24 +24,26 @@ class ProjectHandler {
                 val jsonObj = JSONObject(line)
                 var projectTitle = jsonObj.get("projectTitle").toString()
                 var tasksAssigned = jsonObj.getJSONArray("tasksAssigned").toList()
+                var progress = jsonObj.getInt("progress")
                 // create the project and add it to the projects list within the lambda expression
-                projects.add(createProject(projectTitle, tasksAssigned as List<Task>))
+                projects.add(createProject(projectTitle, tasksAssigned as List<Task>, progress))
             }
         }
         return projects
     }
 
     fun createProjectFromTransferFile(): Project {
+        val transferReaderWriter = TransferReaderWriter()
         // read the line of the transfer file
-        var reader = BufferedReader(FileReader("src/coursework/data transfer.json"))
-        var line = reader.readLine()
+        var line = transferReaderWriter.readTransfer()
         // turn the line into a json object
         val jsonObj = JSONObject(line)
         // get the values out of the json object
         var projectTitle = jsonObj.get("projectTitle").toString()
         var tasksAssigned = jsonObj.getJSONArray("tasksAssigned").toList()
+        var progress = jsonObj.getInt("progress")
         // create a project form these values
-        return createProject(projectTitle, tasksAssigned as List<Task>)
+        return createProject(projectTitle, tasksAssigned as List<Task>, progress)
 
     }
 
@@ -61,10 +62,12 @@ class ProjectHandler {
 
     fun getDisplay(project: Project): String{
         var taskHandler = TaskHandler()
+        var projectProgress = ProjectProgress()
         // get the tasks from the save file as the save file is auto updated this should never be out of date
         var tasks = taskHandler.getTasksFromSave()
         // add the project title to the string
-        var display = "Project Title:\n\t${project.projectTitle} \nTasks for this project:"
+        project.progress = projectProgress.getProjectProgress(project)
+        var display = "Project Title:\n\t${project.projectTitle}\nProject Progress:\n\t${project.progress}% \nTasks for this project:"
         // loop through all the tasks saved
         for (task : Task in tasks){
             // if the task found is assigned to the current project add the title of the task to the string

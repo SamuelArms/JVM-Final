@@ -7,9 +7,8 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import coursework.transfer.TransferReaderWriter;
 
-import java.io.FileWriter;
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -21,19 +20,12 @@ public class ProjectCreationController  implements Initializable {
     @FXML
     private Button submitButton;
 
-    private FileWriter file;
+    private TransferReaderWriter transferReaderWriter = new TransferReaderWriter();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         //Clear the data transfer from the previous session
-        try {
-            file = new FileWriter("src/coursework/data transfer.json");
-            // write an empty line
-            file.write("");
-            file.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        transferReaderWriter.writeTransfer("");
     }
 
     public void submit() {
@@ -42,18 +34,12 @@ public class ProjectCreationController  implements Initializable {
         } else {
             // Make a JSON object of the project so that the project can be transferred from scene to scene
             JSONArray taskArray = new JSONArray();
-            JSONObject jsonString = new JSONObject();
-            jsonString.put("projectTitle", projectTitleField.getText());
-            jsonString.put("tasksAssigned", taskArray).toString();
-            String tansferString = jsonString.toString();
-            try {
-                // Write the json object to the transfer file
-                file = new FileWriter("src/coursework/data transfer.json");
-                file.write(tansferString);
-                file.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("projectTitle", projectTitleField.getText());
+            jsonObject.put("tasksAssigned", taskArray).toString();
+            jsonObject.put("progress", 0);
+            String transferString = jsonObject.toString();
+            transferReaderWriter.writeTransfer(transferString);
             // Return the main GUI
             Stage stage = (Stage) submitButton.getScene().getWindow();
             stage.close();

@@ -1,9 +1,8 @@
 package coursework.team
 
 import org.json.JSONObject
-import java.io.BufferedReader
+import coursework.transfer.TransferReaderWriter
 import java.io.File
-import java.io.FileReader
 import java.util.*
 
 class TeamHandler {
@@ -16,10 +15,12 @@ class TeamHandler {
     }
 
     fun createTeamFromTransferFile(): Team {
+        val transferReaderWriter = TransferReaderWriter()
+
         // define a empty string
         var teamLine = ""
         // using lambda expressions get the line from the data transfer file
-        File("src/coursework/data transfer.json").useLines { lines -> lines.forEach { line -> teamLine = line} }
+        teamLine = transferReaderWriter.readTransfer()
         // create the json object with the line
         val jsonObj = JSONObject(teamLine)
         // get the needed values from the json object

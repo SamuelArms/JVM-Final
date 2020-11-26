@@ -1,6 +1,5 @@
 package coursework.gui;
 
-import coursework.criticalpath.CriticalPathKot;
 import coursework.criticalpath.CriticalPathScala;
 import coursework.persistence.Persistence;
 import coursework.project.Project;
@@ -18,8 +17,9 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextArea;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import coursework.transfer.TransferReaderWriter;
 
-import java.io.FileWriter;
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -47,10 +47,7 @@ public class MainGuiController implements Initializable {
     private final TeamHandler teamHandler = new TeamHandler();
     private final TaskHandler taskHandler = new TaskHandler();
     private final CriticalPathScala criticalPathSca = new CriticalPathScala();
-    private final CriticalPathKot criticalPathKot = new CriticalPathKot();
-
-    // Set up the writer for transferring data between scenes
-    private FileWriter file;
+    private TransferReaderWriter transferReaderWriter = new TransferReaderWriter();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -67,14 +64,7 @@ public class MainGuiController implements Initializable {
         setTaskListView();
 
         //Clear the data transfer from the previous session
-        try {
-            file = new FileWriter("src/coursework/data transfer.json");
-            // write an empty line
-            file.write("");
-            file.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        transferReaderWriter.writeTransfer("");
     }
 
     public void createProject() {
@@ -88,9 +78,12 @@ public class MainGuiController implements Initializable {
             stage.setScene(scene);
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.showAndWait();
-            // Get the created project from the transfer file add it to the main GUI and save it
-            projects.add(projectHandler.createProjectFromTransferFile());
-            // update the listview and save with the new project made
+            File file = new File("src/coursework/transfer/data transfer.json");
+            if (file.length() != 0) {
+                // Get the created project from the transfer file add it to the main GUI and save it
+                projects.add(projectHandler.createProjectFromTransferFile());
+                // update the listview and save with the new project made
+            }
             setProjectListView();
             save();
         } catch (IOException ex) {
@@ -109,9 +102,12 @@ public class MainGuiController implements Initializable {
             stage.setScene(scene);
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.showAndWait();
-            // Get the created team from the transfer file add it to the main GUI and save it
-            teams.add(teamHandler.createTeamFromTransferFile());
-            // save and update the gui
+            File file = new File("src/coursework/data transfer.json");
+            if (file.length() != 0) {
+                // Get the created team from the transfer file add it to the main GUI and save it
+                teams.add(teamHandler.createTeamFromTransferFile());
+                // save and update the gui
+            }
             save();
             setTeamListView();
         } catch (IOException ex) {
@@ -138,30 +134,22 @@ public class MainGuiController implements Initializable {
             stage.setScene(scene);
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.showAndWait();
-            // Get the created task from the transfer file
-            tasks.add(taskHandler.createTaskFromTransferFile());
-            // Get the task as a placeholder variable
-            placeholderTask = taskHandler.createTaskFromTransferFile();
-            placeholderProjectTitle = placeholderTask.getProjectFor();
-            // For loop to find the project the task is assigned to
-            for (int i = 0; i < projects.size(); i++) {
-                if (placeholderProjectTitle.equals(projects.get(i).getProjectTitle())){
-                    placeholderProject = projectHandler.addTask(projects.get(i), placeholderTask);
-                    projects.set(i, placeholderProject);
+            File file = new File("src/coursework/transfer/data transfer.json");
+            if(file.length() != 0) {
+                // Get the created task from the transfer file
+                tasks.add(taskHandler.createTaskFromTransferFile());
+                // Get the task as a placeholder variable
+                placeholderTask = taskHandler.createTaskFromTransferFile();
+                placeholderProjectTitle = placeholderTask.getProjectFor();
+                // For loop to find the project the task is assigned to
+                for (int i = 0; i < projects.size(); i++) {
+                    if (placeholderProjectTitle.equals(projects.get(i).getProjectTitle())) {
+                        placeholderProject = projectHandler.addTask(projects.get(i), placeholderTask);
+                        projects.set(i, placeholderProject);
 
+                    }
                 }
             }
-            /*
-            for (Project project: projects) {
-                if (placeholderProjectTitle.equals(project.getProjectTitle())) {
-                    placeholderProject = projectHandler.addTask(project, placeholderTask);
-                    // set the updated project in the place of the old project in the list
-                    projects.set(count - 1, placeholderProject);
-                }
-                count += count +1;
-            }
-
-             */
             // Set the GUI to show updated values and save
             setTaskListView();
             setProjectListView();
@@ -299,21 +287,14 @@ public class MainGuiController implements Initializable {
             if (updateTask.equals(task.getTaskTitle())){
                 // get save string of the task
                 String transferString = taskHandler.getSaveString(task);
-                try {
-                    // write the task to the data transfer file
-                    file = new FileWriter("src/coursework/data transfer.json");
-                    file.write(transferString);
-                    file.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                transferReaderWriter.writeTransfer(transferString);
             }
         }
         // show the new gui
         FXMLLoader fxmlLoader = new FXMLLoader();
         fxmlLoader.setLocation(getClass().getResource("TaskEdit.fxml"));
         try {
-            Scene scene = new Scene(fxmlLoader.load(), 500, 400);
+            Scene scene = new Scene(fxmlLoader.load(), 700, 400);
             Stage stage = new Stage();
             stage.setTitle("Task Edit");
             stage.setScene(scene);
@@ -343,8 +324,9 @@ public class MainGuiController implements Initializable {
             }
         }
 
-
         // save and update the gui
+        infoArea.setText("");
+        taskList.getSelectionModel().clearSelection();
         save();
         setTeamListView();
         setProjectListView();
@@ -358,14 +340,7 @@ public class MainGuiController implements Initializable {
             if (updateTeam.equals(team.getTeamTitle())){
                 // get save string of the task
                 String transferString = teamHandler.getSaveString(team);
-                try {
-                    // write the task to the data transfer file
-                    file = new FileWriter("src/coursework/data transfer.json");
-                    file.write(transferString);
-                    file.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+               transferReaderWriter.writeTransfer(transferString);
             }
         }
         // show the new gui
@@ -393,6 +368,8 @@ public class MainGuiController implements Initializable {
             count += 1;
         }
         // save and update the gui
+        infoArea.setText("");
+        teamList.getSelectionModel().clearSelection();
         save();
         setTeamListView();
     }
